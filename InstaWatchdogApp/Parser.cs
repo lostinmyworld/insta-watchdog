@@ -7,7 +7,7 @@ internal class Parser
     private readonly EnvironmentVariables _environmentVars;
 
     private static readonly string[] _headers =
-    {
+    [
         "**Το έχεις δει αυτό;**",
         "**Μήπως σου ξέφυγε αυτό;**",
         "**Κάτι νέο ανέβηκε 👀**",
@@ -16,7 +16,7 @@ internal class Parser
         "**Τσι τσι ρι πο τσι ρι**",
         "**Notification; Δεν ήρθε; Σου το φέρνω εγώ.**",
         "**Αυτό αξίζει ένα κλικ.**"
-    };
+    ];
 
     public Parser()
     {
@@ -94,22 +94,9 @@ internal class Parser
             lines.Add(post.Permalink);
         }
 
-        var embed = new Dictionary<string, object?>
-        {
-            ["title"] = post.MediaType ?? "MEDIA",
-            ["url"] = post.Permalink,
-            ["timestamp"] = post.Timestamp
-        };
-
-        if (!string.IsNullOrWhiteSpace(post.MediaUrl))
-        {
-            embed["image"] = new { url = post.MediaUrl };
-        }
-
         return new()
         {
-            Content = string.Join("\n", lines),
-            Embeds = [embed]
+            Content = string.Join("\n", lines)
         };
     }
 

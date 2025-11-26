@@ -7,6 +7,6 @@ public class DiscordRequest
     [JsonPropertyName("content")]
     public string? Content { get; set; }
 
-    [JsonPropertyName("embed")]
+    [JsonPropertyName("embeds")]
     public Dictionary<string, object?>[] Embeds { get; set; } = [];
 }

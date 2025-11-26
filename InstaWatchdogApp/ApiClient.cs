@@ -31,6 +31,8 @@ public class ApiClient
 
     public async Task<List<Post>> RetrievePostsAsync()
     {
+        Console.WriteLine("Retrieving Instagram Posts...");
+
         var queryParams = new Dictionary<string, string>
         {
             ["fields"] = _instagramFields,
@@ -58,6 +60,8 @@ public class ApiClient
 
     public async Task<InstaState> LoadPreviousStateAsync()
     {
+        Console.WriteLine("Loading Previous State...");
+
         var requestUri = Endpoints.GithubGistApiUri.Replace("{gistId}", _environmentVariables.GistId);
         using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
         request.Headers.Authorization = new("Bearer", _environmentVariables.GistToken);
@@ -92,6 +96,8 @@ public class ApiClient
 
     public async Task SaveCurrentStateAsync(InstaState state)
     {
+        Console.WriteLine("Saving State...");
+
         var stateJson = JsonSerializer.Serialize(state, _jsonOptions);
 
         var payload = new GistResponse
@@ -141,7 +147,9 @@ public class ApiClient
 
     public async Task SendToDiscordAsync(DiscordRequest discordRequest)
     {
-        var jsonPayload = JsonSerializer.Serialize(discordRequest);
+        Console.WriteLine("Posting to Discord...");
+
+        var jsonPayload = JsonSerializer.Serialize(discordRequest, _jsonOptions);
         var request = new HttpRequestMessage(HttpMethod.Post, _environmentVariables.DiscordWebHook)
         {
             Content = new StringContent(jsonPayload, Encoding.UTF8, MediaTypeNames.Application.Json)

@@ -9,7 +9,7 @@ var apiClient = new ApiClient(environmentVars);
 try
 {
     var state = await apiClient.LoadPreviousStateAsync();
-    Console.WriteLine($"LastInstagramId from state: {state.LastPostId ?? "<null>"}");
+    Console.WriteLine($"LastInstagramId from state: {state.LastPostId ?? "null"}.");
 
     // Retrieve the latest Instagram posts
     var instagramPosts = await apiClient.RetrievePostsAsync();

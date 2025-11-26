@@ -1,0 +1,46 @@
+name: Insta Watchdog
+
+on:
+    schedule:
+        - cron: "*/30 * * * *" # every 30 minutes
+    workflow_dispatch:
+
+jobs:
+    my_account:
+        if: ${{ vars.DISABLE_WATCHDOG_MINE != 'true' }}
+        runs-on: ubuntu-latest
+        env:
+            IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+            DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+            GIST_ID: ${{ secrets.GIST_ID }}
+            GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+            GIST_STATE_FILE_NAME: ${{ secrets.GIST_STATE_FILE_NAME }}
+        steps:
+            -   uses: actions/checkout@v4
+            -   name: Setup .NET
+                uses: actions/setup-dotnet@v4
+                with:
+                    dotnet-version: "10.x"
+
+            -   name: Run Insta Watchdog for me
+                run: dotnet run --project InstaWatchdogApp
+
+    friend_account:
+        if: ${{ vars.DISABLE_WATCHDOG_FRIEND != 'true' }}
+        runs-on: ubuntu-latest
+        needs: my_account # optional, just to run sequentially
+        env:
+            IG_ACCESS_TOKEN: ${{ secrets.FRIEND_IG_ACCESS_TOKEN }}
+            DISCORD_WEBHOOK_URL: ${{ secrets.FRIEND_DISCORD_WEBHOOK_URL }}
+            GIST_ID: ${{ secrets.FRIEND_GIST_ID }}
+            GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+            GIST_STATE_FILE_NAME: ${{ secrets.FRIEND_GIST_STATE_FILE_NAME }}
+        steps:
+        -   uses: actions/checkout@v4
+        -   name: Setup .NET
+            uses: actions/setup-dotnet@v4
+            with:
+                dotnet-version: "10.x"
+
+        -   name: Run Insta Watchdog for friend
+            run: dotnet run --project InstaWatchdogApp

@@ -23,20 +23,34 @@ internal class Parser
         LoadLocalEnv(".env.local");
 
         var instagramToken = Environment.GetEnvironmentVariable("IG_ACCESS_TOKEN");
-        var instagramGraphApiToken = Environment.GetEnvironmentVariable("INSTAGRAM_GRAPH_API_MEDIA_URI");
-        var discordWebhookUrl = Environment.GetEnvironmentVariable("DISCORD_WEBHOOK_URL");
-        var gistId = Environment.GetEnvironmentVariable("GIST_ID");
-        var gistToken = Environment.GetEnvironmentVariable("GIST_TOKEN");
-        var gistStateFileName = Environment.GetEnvironmentVariable("GIST_STATE_FILE_NAME");
-
-        if (string.IsNullOrWhiteSpace(instagramToken)
-            || string.IsNullOrWhiteSpace(instagramGraphApiToken)
-            || string.IsNullOrWhiteSpace(discordWebhookUrl)
-            || string.IsNullOrWhiteSpace(gistId)
-            || string.IsNullOrWhiteSpace(gistToken)
-            || string.IsNullOrWhiteSpace(gistStateFileName))
+        if (string.IsNullOrWhiteSpace(instagramToken))
         {
-            Console.Error.WriteLine("Missing one or more required env vars: IG_ACCESS_TOKEN, DISCORD_WEBHOOK_URL, GIST_ID, GIST_TOKEN.");
+            Console.Error.WriteLine("Missing environment variable: IG_ACCESS_TOKEN.");
+        }
+        var instagramGraphApiToken = Environment.GetEnvironmentVariable("INSTAGRAM_GRAPH_API_MEDIA_URI");
+        if (string.IsNullOrWhiteSpace(instagramGraphApiToken))
+        {
+            Console.Error.WriteLine("Missing environment variable: INSTAGRAM_GRAPH_API_MEDIA_URI.");
+        }
+        var discordWebhookUrl = Environment.GetEnvironmentVariable("DISCORD_WEBHOOK_URL");
+        if (string.IsNullOrWhiteSpace(discordWebhookUrl))
+        {
+            Console.Error.WriteLine("Missing environment variable: DISCORD_WEBHOOK_URL.");
+        }
+        var gistId = Environment.GetEnvironmentVariable("GIST_ID");
+        if (string.IsNullOrWhiteSpace(gistId))
+        {
+            Console.Error.WriteLine("Missing environment variable: GIST_ID.");
+        }
+        var gistToken = Environment.GetEnvironmentVariable("GIST_TOKEN");
+        if (string.IsNullOrWhiteSpace(gistToken))
+        {
+            Console.Error.WriteLine("Missing environment variable: GIST_TOKEN.");
+        }
+        var gistStateFileName = Environment.GetEnvironmentVariable("GIST_STATE_FILE_NAME");
+        if (string.IsNullOrWhiteSpace(gistStateFileName))
+        {
+            Console.Error.WriteLine("Missing environment variable: GIST_STATE_FILE_NAME.");
         }
 
         _environmentVars = new EnvironmentVariables(

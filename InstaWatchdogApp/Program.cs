@@ -20,9 +20,10 @@ try
     }
 
     // Find 1 not shared in Discord (its post id will be located in state if it is)
-    var postToShare = parser.GetNewPost(instagramPosts, state);
+    var postToShare = parser.GetOlderNotSharedPost(instagramPosts, state);
     if (postToShare is null)
     {
+        Console.WriteLine("No new post to share.");
         return;
     }
 

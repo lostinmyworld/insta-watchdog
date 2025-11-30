@@ -1,4 +1,5 @@
 ﻿using InstaWatchdogApp.Models;
+using SocialModels;
 
 namespace InstaWatchdogApp;
 
@@ -30,7 +31,7 @@ internal class Parser
         return _environmentVars;
     }
 
-    public Post? GetOlderNotSharedPost(List<Post> posts, InstaState? state)
+    public Post? GetOlderNotSharedPost(List<Post> posts, LastState? state)
     {
         // no posts retrieved => nothing to do
         if (posts is null || posts.Count == 0)

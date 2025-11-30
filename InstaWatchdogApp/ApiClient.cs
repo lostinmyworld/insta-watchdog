@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using InstaWatchdogApp.Models;
 using Microsoft.AspNetCore.WebUtilities;
+using SocialModels;
 
 namespace InstaWatchdogApp;
 
@@ -58,7 +59,7 @@ public class ApiClient
            .ToList();
     }
 
-    public async Task<InstaState> LoadPreviousStateAsync()
+    public async Task<LastState> LoadPreviousStateAsync()
     {
         Console.WriteLine("Loading Previous State...");
 
@@ -83,7 +84,7 @@ public class ApiClient
 
         try
         {
-            return JsonSerializer.Deserialize<InstaState>(stateFile.Content, _jsonOptions)
+            return JsonSerializer.Deserialize<LastState>(stateFile.Content, _jsonOptions)
                 ?? new();
         }
         catch (JsonException ex)
@@ -94,7 +95,7 @@ public class ApiClient
         }
     }
 
-    public async Task SaveCurrentStateAsync(InstaState state)
+    public async Task SaveCurrentStateAsync(LastState state)
     {
         Console.WriteLine("Saving State...");
 

@@ -4,3 +4,5 @@ This schedules a read of Instagram and if it finds a new post, it posts it in Di
 ![alt text](Architecture.png)
 
 I have a workflow to do this on a logical schedule. It also works with local values.
+
+[![Insta Watchdog](https://github.com/lostinmyworld/insta-watchdog/actions/workflows/insta-watchdog.yml/badge.svg?branch=main)](https://github.com/lostinmyworld/insta-watchdog/actions/workflows/insta-watchdog.yml)

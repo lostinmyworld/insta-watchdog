@@ -1,9 +1,13 @@
-﻿using InstaWatchdogApp.Models;
-using SocialModels;
+﻿using InstaWatchdogApp.Abstractions;
+using InstaWatchdogApp.Models;
+using Social.Models.Discord;
+using Social.Models.Gist;
+using Social.Models.Instagram;
+using Social.Oversharers.Abstractions;
 
 namespace InstaWatchdogApp;
 
-internal class Parser
+public class Parser : IParser
 {
     private readonly EnvironmentVariables _environmentVars;
 
@@ -19,11 +23,17 @@ internal class Parser
         "**Αυτό αξίζει ένα κλικ.**"
     ];
 
-    public Parser()
+    public Parser(IEnvironmentLoader environmentLoader)
     {
-        SetEnvironmentVariablesFromLocalFile(".env.local");
+        var gistOptionsToRetrieve = new GistOptions()
+        {
+            GistId = "GIST_ID",
+            GistToken = "GIST_TOKEN",
+            GistStateFileName = "GIST_STATE_FILE_NAME",
+        };
+        var gistOptions = environmentLoader.LoadGistOptions(gistOptionsToRetrieve);
 
-        _environmentVars = RetrieveEnvironmentVariables();
+        _environmentVars = RetrieveEnvironmentVariables(gistOptions!);
     }
 
     public EnvironmentVariables GetEnvironmentVariables()
@@ -31,7 +41,7 @@ internal class Parser
         return _environmentVars;
     }
 
-    public Post? GetOlderNotSharedPost(List<Post> posts, LastState? state)
+    public InstagramPost? GetOlderNotSharedPost(List<InstagramPost> posts, LastState? state)
     {
         // no posts retrieved => nothing to do
         if (posts is null || posts.Count == 0)
@@ -60,7 +70,7 @@ internal class Parser
         return posts[lastIndex - 1];
     }
 
-    public DiscordRequest BuildDiscordRequest(Post post)
+    public DiscordRequest BuildDiscordRequest(InstagramPost post)
     {
         var lines = new List<string>
         {
@@ -78,46 +88,7 @@ internal class Parser
         };
     }
 
-    private static void SetEnvironmentVariablesFromLocalFile(string path)
-    {
-        try
-        {
-            if (!File.Exists(path))
-            {
-                return;
-            }
-
-            Console.WriteLine($"Loading local env from {path}...");
-            var lines = File.ReadAllLines(path);
-
-            foreach (var raw in lines)
-            {
-                var line = raw.Trim();
-                if (string.IsNullOrWhiteSpace(line)
-                    || line.StartsWith('#'))
-                {
-                    continue;
-                }
-
-                var index = line.IndexOf('=', StringComparison.Ordinal);
-                if (index <= 0)
-                {
-                    continue;
-                }
-
-                var key = line[..index].Trim();
-                var value = line[(index + 1)..].Trim();
-
-                Environment.SetEnvironmentVariable(key, value);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Failed to load .env.local: " + ex.Message);
-        }
-    }
-
-    private EnvironmentVariables RetrieveEnvironmentVariables()
+    private static EnvironmentVariables RetrieveEnvironmentVariables(GistOptions gistOptions)
     {
         var instagramToken = Environment.GetEnvironmentVariable("IG_ACCESS_TOKEN");
         if (string.IsNullOrWhiteSpace(instagramToken))
@@ -134,29 +105,12 @@ internal class Parser
         {
             Console.Error.WriteLine("Missing environment variable: DISCORD_WEBHOOK_URL.");
         }
-        var gistId = Environment.GetEnvironmentVariable("GIST_ID");
-        if (string.IsNullOrWhiteSpace(gistId))
-        {
-            Console.Error.WriteLine("Missing environment variable: GIST_ID.");
-        }
-        var gistToken = Environment.GetEnvironmentVariable("GIST_TOKEN");
-        if (string.IsNullOrWhiteSpace(gistToken))
-        {
-            Console.Error.WriteLine("Missing environment variable: GIST_TOKEN.");
-        }
-        var gistStateFileName = Environment.GetEnvironmentVariable("GIST_STATE_FILE_NAME");
-        if (string.IsNullOrWhiteSpace(gistStateFileName))
-        {
-            Console.Error.WriteLine("Missing environment variable: GIST_STATE_FILE_NAME.");
-        }
 
         return new EnvironmentVariables(
             instagramToken!,
             instagramGraphApiToken!,
             discordWebhookUrl!,
-            gistId!,
-            gistToken!,
-            gistStateFileName!);
+            gistOptions);
     }
 
     private static string GetRandomHeader()

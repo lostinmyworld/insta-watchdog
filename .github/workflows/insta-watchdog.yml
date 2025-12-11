@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+      INSTAGRAM_GRAPH_API_MEDIA_URI: ${{ secrets.INSTAGRAM_GRAPH_API_MEDIA_URI }}
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
       GIST_ID: ${{ secrets.GIST_ID }}
       GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
@@ -32,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IG_ACCESS_TOKEN: ${{ secrets.FRIEND_IG_ACCESS_TOKEN }}
+      INSTAGRAM_GRAPH_API_MEDIA_URI: ${{ secrets.INSTAGRAM_GRAPH_API_MEDIA_URI }}
       DISCORD_WEBHOOK_URL: ${{ secrets.FRIEND_DISCORD_WEBHOOK_URL }}
       GIST_ID: ${{ secrets.FRIEND_GIST_ID }}
       GIST_TOKEN: ${{ secrets.GIST_TOKEN }}

@@ -2,7 +2,7 @@ name: Insta Watchdog
 
 on:
   schedule:
-    - cron: "17,47 * * * *" # every 30 minutes
+    - cron: "17,47 * * * *" # schedule on when the GitHub Action will be run
   workflow_dispatch:
 
 jobs:

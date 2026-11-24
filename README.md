@@ -1,4 +1,8 @@
 # insta-watchdog
+
+> [!IMPORTANT]
+> **Archived.** Moved to [not-another-social-bot](https://github.com/lostinmyworld/not-another-social-bot), which covers Instagram, YouTube, Discord and Threads.
+
 This schedules a read of Instagram and if it finds a new post, it posts it in Discord. The new post ID is saved to be able to have the latest post shared.
 
 ![alt text](Architecture.png)
